@@ -34,17 +34,31 @@ namespace WebMVC.Controllers
         [HttpPost]
         public IActionResult Store(Category category)
         {
-            if (_appDbContext.Categories.Any(d => d.Name.ToLower() == category.Name.ToLower()))
-            {
-                ModelState.AddModelError("Name", "Category name must be unique");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return View("Create", category);
-            }
+            if (_appDbContext.Categories.Any(d => d.Name.ToLower() == category.Name.ToLower())) ModelState.AddModelError("Name", "Category name must be unique");
+            if (!ModelState.IsValid) return View("Create", category);
 
             _appDbContext.Categories.Add(category);
+            _appDbContext.SaveChanges();
+
+            return RedirectToAction("Index", "Category");
+        }
+
+        public IActionResult Edit(int? Id)
+        {
+            Category? category = _appDbContext.Categories.Find(Id);
+
+            if (category == null) return NotFound();
+
+            return View(category);
+        }
+
+        [HttpPost]
+        public IActionResult Update(Category category)
+        {
+            if (_appDbContext.Categories.Any(d => d.Name.ToLower() == category.Name.ToLower() && d.Id != category.Id)) ModelState.AddModelError("Name", "Category name must be unique");
+            if (!ModelState.IsValid) return View("Edit", category);
+
+            _appDbContext.Update(category);
             _appDbContext.SaveChanges();
 
             return RedirectToAction("Index", "Category");

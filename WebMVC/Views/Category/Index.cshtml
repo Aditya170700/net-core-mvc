@@ -16,6 +16,7 @@
             <tr>
                 <th>Name</th>
                 <th>Display Order</th>
+                <th></th>
             </tr>
         </thead>
         <tnody>
@@ -24,6 +25,10 @@
                 <tr>
                     <td>@item.Name</td>
                     <td>@item.DisplayOrder</td>
+                    <td class="d-flex justify-content-center">
+                        <a class="btn btn-sm btn-warning rounded mx-1" asp-controller="Category" asp-action="Edit" asp-route-Id="@item.Id"><i class="bi bi-pencil-square"></i></a>
+                        <a class="btn btn-sm btn-danger rounded mx-1" asp-controller="Category" asp-action="Delete"><i class="bi bi-trash-fill"></i></a>
+                    </td>
                 </tr>
             }
         </tnody>
