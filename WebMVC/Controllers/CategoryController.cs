@@ -58,7 +58,19 @@ namespace WebMVC.Controllers
             if (_appDbContext.Categories.Any(d => d.Name.ToLower() == category.Name.ToLower() && d.Id != category.Id)) ModelState.AddModelError("Name", "Category name must be unique");
             if (!ModelState.IsValid) return View("Edit", category);
 
-            _appDbContext.Update(category);
+            _appDbContext.Categories.Update(category);
+            _appDbContext.SaveChanges();
+
+            return RedirectToAction("Index", "Category");
+        }
+
+        public IActionResult Delete(int? Id)
+        {
+            Category? category = _appDbContext.Categories.Find(Id);
+
+            if (category == null) return NotFound();
+
+            _appDbContext.Categories.Remove(category);
             _appDbContext.SaveChanges();
 
             return RedirectToAction("Index", "Category");
