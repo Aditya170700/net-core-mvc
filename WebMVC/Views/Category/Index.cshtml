@@ -1,20 +1,31 @@
 ﻿@model List<Category>
 
-<h1>Category List</h1>
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Display Order</th>
-        </tr>
-    </thead>
-    <tnody>
-        @foreach (var item in Model.OrderBy(d => d.DisplayOrder))
-        {
+<div class="container">
+    <div class="row py-4">
+        <div class="col-6">
+            <h1>CATEGORY LIST</h1>
+        </div>
+        <div class="col-6 text-end">
+            <a class="btn btn-primary btn-sm rounded" asp-controller="Category" asp-action="Create">
+                <i class="bi bi-plus-lg"></i> CREATE
+            </a>
+        </div>
+    </div>
+    <table class="table table-bordered table-striped">
+        <thead>
             <tr>
-                <td>@item.Name</td>
-                <td>@item.DisplayOrder</td>
+                <th>Name</th>
+                <th>Display Order</th>
             </tr>
-        }
-    </tnody>
-</table>
+        </thead>
+        <tnody>
+            @foreach (var item in Model.OrderBy(d => d.DisplayOrder))
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.DisplayOrder</td>
+                </tr>
+            }
+        </tnody>
+    </table>
+</div>

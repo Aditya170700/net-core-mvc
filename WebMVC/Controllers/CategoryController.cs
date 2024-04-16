@@ -19,12 +19,25 @@ namespace WebMVC.Controllers
             _appDbContext = appDbContext;
         }
 
-        // GET: /<controller>/
         public IActionResult Index()
         {
             List<Category> results = _appDbContext.Categories.ToList();
 
             return View(results);
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Store(Category category)
+        {
+            _appDbContext.Categories.Add(category);
+            _appDbContext.SaveChanges();
+
+            return RedirectToAction("Index", "Category");
         }
     }
 }
