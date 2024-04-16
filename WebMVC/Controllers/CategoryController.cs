@@ -40,6 +40,8 @@ namespace WebMVC.Controllers
             _appDbContext.Categories.Add(category);
             _appDbContext.SaveChanges();
 
+            TempData["success"] = "Category created successfully";
+
             return RedirectToAction("Index", "Category");
         }
 
@@ -61,6 +63,8 @@ namespace WebMVC.Controllers
             _appDbContext.Categories.Update(category);
             _appDbContext.SaveChanges();
 
+            TempData["success"] = "Category updated successfully";
+
             return RedirectToAction("Index", "Category");
         }
 
@@ -72,6 +76,8 @@ namespace WebMVC.Controllers
 
             _appDbContext.Categories.Remove(category);
             _appDbContext.SaveChanges();
+
+            TempData["success"] = "Category deleted successfully";
 
             return RedirectToAction("Index", "Category");
         }
