@@ -34,6 +34,11 @@ namespace WebMVC.Controllers
         [HttpPost]
         public IActionResult Store(Category category)
         {
+            if (_appDbContext.Categories.Any(d => d.Name.ToLower() == category.Name.ToLower()))
+            {
+                ModelState.AddModelError("Name", "Category name must be unique");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View("Create", category);
