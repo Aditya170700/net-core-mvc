@@ -34,6 +34,11 @@ namespace WebMVC.Controllers
         [HttpPost]
         public IActionResult Store(Category category)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("Create", category);
+            }
+
             _appDbContext.Categories.Add(category);
             _appDbContext.SaveChanges();
 

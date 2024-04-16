@@ -16,10 +16,12 @@
             <div class="mb-3">
                 <label asp-for="Name"></label>
                 <input class="form-control rounded" type="text" asp-for="Name" />
+                <span asp-validation-for="Name" class="text-danger small"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="DisplayOrder"></label>
                 <input class="form-control rounded" type="number" asp-for="DisplayOrder" />
+                <span asp-validation-for="DisplayOrder" class="text-danger small"></span>
             </div>
             <button type="submit" class="btn btn-primary rounded w-10">SAVE</button>
         </div>
