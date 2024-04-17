@@ -1,0 +1,37 @@
+﻿@page
+@model WebRazor.Pages.Categories.CreateModel
+
+<div class="container">
+    <div class="row py-4">
+        <div class="col-6">
+            <h1>CREATE CATEGORY</h1>
+        </div>
+        <div class="col-6 text-end">
+            <a class="btn btn-outline-primary btn-sm rounded" asp-page="/categories/index">
+                <i class="bi bi-arrow-left"></i> BACK
+            </a>
+        </div>
+    </div>
+    <form method="post" asp-controller="Category" asp-action="Store">
+        <div class="border p-3 my-4">
+            <div class="mb-3">
+                <label asp-for="Category.Name"></label>
+                <input class="form-control rounded" type="text" asp-for="Category.Name" />
+                <span asp-validation-for="Category.Name" class="text-danger small"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Category.DisplayOrder"></label>
+                <input class="form-control rounded" type="number" asp-for="Category.DisplayOrder" />
+                <span asp-validation-for="Category.DisplayOrder" class="text-danger small"></span>
+            </div>
+            <button type="submit" class="btn btn-primary rounded w-10">SAVE</button>
+        </div>
+    </form>
+</div>
+
+@*Client side validation*@
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
