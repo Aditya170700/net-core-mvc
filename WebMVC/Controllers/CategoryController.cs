@@ -74,6 +74,14 @@ namespace WebMVC.Controllers
 
             if (category == null) return NotFound();
 
+            return View(category);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(Category category)
+        {
+            if (category == null) return NotFound();
+
             _appDbContext.Categories.Remove(category);
             _appDbContext.SaveChanges();
 

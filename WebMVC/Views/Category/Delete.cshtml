@@ -1,0 +1,37 @@
+﻿@model Category
+
+<div class="container">
+    <div class="row py-4">
+        <div class="col-6">
+            <h1>DELETE CATEGORY</h1>
+        </div>
+        <div class="col-6 text-end">
+            <a class="btn btn-outline-primary btn-sm rounded" asp-controller="Category" asp-action="Index">
+                <i class="bi bi-arrow-left"></i> BACK
+            </a>
+        </div>
+    </div>
+    <form method="post" asp-controller="Category" asp-action="Delete">
+        <input asp-for="Id" hidden />
+        <div class="border p-3 my-4">
+            <div class="mb-3">
+                <label asp-for="Name"></label>
+                <input class="form-control rounded" type="text" asp-for="Name" disabled />
+                <span asp-validation-for="Name" class="text-danger small"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="DisplayOrder"></label>
+                <input class="form-control rounded" type="number" asp-for="DisplayOrder" disabled />
+                <span asp-validation-for="DisplayOrder" class="text-danger small"></span>
+            </div>
+            <button type="submit" class="btn btn-primary rounded w-10">DELETE</button>
+        </div>
+    </form>
+</div>
+
+@*Client side validation*@
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
