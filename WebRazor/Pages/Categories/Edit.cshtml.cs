@@ -10,29 +10,31 @@ using WebRazor.Models;
 namespace WebRazor.Pages.Categories
 {
     [BindProperties]
-	public class CreateModel : PageModel
+	public class EditModel : PageModel
     {
         private readonly AppDbContext _appDbContext;
         public Category Category { get; set; }
 
-        public CreateModel(AppDbContext appDbContext)
+        public EditModel(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
         }
 
-        public void OnGet()
+        public void OnGet(int Id)
         {
+            Category = _appDbContext.Categories.Find(Id);
         }
 
         public IActionResult OnPost()
         {
-            if (_appDbContext.Categories.Any(d => d.Name.ToLower() == Category.Name.ToLower())) ModelState.AddModelError("Category.Name", "Category name must be unique");
+
+            if (_appDbContext.Categories.Any(d => d.Name.ToLower() == Category.Name.ToLower() && d.Id != Category.Id)) ModelState.AddModelError("Category.Name", "Category name must be unique");
             if (!ModelState.IsValid) return Page();
 
-            _appDbContext.Categories.Add(Category);
+            _appDbContext.Categories.Update(Category);
             _appDbContext.SaveChanges();
 
-            TempData["success"] = "Category created successfully";
+            TempData["success"] = "Category updated successfully";
 
             return RedirectToPage("Index");
         }

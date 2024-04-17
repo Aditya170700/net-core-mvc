@@ -1,10 +1,10 @@
 ﻿@page
-@model WebRazor.Pages.Categories.CreateModel
+@model WebRazor.Pages.Categories.EditModel
 
 <div class="container">
     <div class="row py-4">
         <div class="col-6">
-            <h1>CREATE CATEGORY</h1>
+            <h1>EDIT CATEGORY</h1>
         </div>
         <div class="col-6 text-end">
             <a class="btn btn-outline-primary btn-sm rounded" asp-page="/categories/index">
@@ -13,6 +13,7 @@
         </div>
     </div>
     <form method="post">
+        <input asp-for="Category.Id" hidden />
         <div class="border p-3 my-4">
             <div class="mb-3">
                 <label asp-for="Category.Name"></label>
@@ -24,7 +25,7 @@
                 <input class="form-control rounded" type="number" asp-for="Category.DisplayOrder" />
                 <span asp-validation-for="Category.DisplayOrder" class="text-danger small"></span>
             </div>
-            <button type="submit" class="btn btn-primary rounded w-10">SAVE</button>
+            <button type="submit" class="btn btn-primary rounded w-10">UPDATE</button>
         </div>
     </form>
 </div>
