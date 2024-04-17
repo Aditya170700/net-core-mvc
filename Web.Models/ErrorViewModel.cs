@@ -1,4 +1,4 @@
-﻿namespace WebMVC.Models;
+﻿namespace Web.Models;
 
 public class ErrorViewModel
 {

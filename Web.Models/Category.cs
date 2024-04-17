@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace WebMVC.Models
+namespace Web.Models
 {
 	public class Category
 	{
