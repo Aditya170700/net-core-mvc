@@ -1,0 +1,38 @@
+﻿@page
+@model WebRazor.Pages.Categories.IndexModel
+
+<div class="container">
+    <div class="row py-4">
+        <div class="col-6">
+            <h1>CATEGORY LIST</h1>
+        </div>
+        <div class="col-6 text-end">
+            <a class="btn btn-primary btn-sm rounded" asp-page="categories/create">
+                <i class="bi bi-plus-lg"></i> CREATE
+            </a>
+        </div>
+    </div>
+
+    <table class="table table-bordered table-striped rounded">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Display Order</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tnody>
+            @foreach (var item in Model.Categories.OrderBy(d => d.DisplayOrder))
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.DisplayOrder</td>
+                    <td class="d-flex justify-content-center">
+                        <a class="btn btn-sm btn-warning rounded mx-1" asp-page="categories/edit" asp-route-Id="@item.Id"><i class="bi bi-pencil-square"></i></a>
+                        <a class="btn btn-sm btn-danger rounded mx-1" asp-page="categories/delete" asp-route-Id="@item.Id"><i class="bi bi-trash-fill"></i></a>
+                    </td>
+                </tr>
+            }
+        </tnody>
+    </table>
+</div>
