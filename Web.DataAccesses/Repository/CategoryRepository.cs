@@ -15,11 +15,6 @@ namespace Web.DataAccesses.Repository
             _appDbContext = appDbContext;
         }
 
-        public void Save()
-        {
-            _appDbContext.SaveChanges();
-        }
-
         public void Update(Category entity)
         {
             _appDbContext.Categories.Update(entity);

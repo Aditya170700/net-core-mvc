@@ -13,16 +13,16 @@ namespace WebMVC.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ICategoryRepository _categoryRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CategoryController(ICategoryRepository categoryRepository)
+        public CategoryController(IUnitOfWork unitOfWork)
         {
-            _categoryRepository = categoryRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
         {
-            List<Category> results = _categoryRepository.GetAll().ToList();
+            List<Category> results = _unitOfWork.CategoryRepository.GetAll().ToList();
 
             return View(results);
         }
@@ -35,11 +35,11 @@ namespace WebMVC.Controllers
         [HttpPost]
         public IActionResult Store(Category category)
         {
-            if (_categoryRepository.Any(d => d.Name.ToLower() == category.Name.ToLower())) ModelState.AddModelError("Name", "Category name must be unique");
+            if (_unitOfWork.CategoryRepository.Any(d => d.Name.ToLower() == category.Name.ToLower())) ModelState.AddModelError("Name", "Category name must be unique");
             if (!ModelState.IsValid) return View("Create", category);
 
-            _categoryRepository.Add(category);
-            _categoryRepository.Save();
+            _unitOfWork.CategoryRepository.Add(category);
+            _unitOfWork.Save();
 
             TempData["success"] = "Category created successfully";
 
@@ -48,7 +48,7 @@ namespace WebMVC.Controllers
 
         public IActionResult Edit(int? Id)
         {
-            Category? category = _categoryRepository.Get(d => d.Id == Id);
+            Category? category = _unitOfWork.CategoryRepository.Get(d => d.Id == Id);
 
             if (category == null) return NotFound();
 
@@ -58,11 +58,11 @@ namespace WebMVC.Controllers
         [HttpPost]
         public IActionResult Update(Category category)
         {
-            if (_categoryRepository.Any(d => d.Name.ToLower() == category.Name.ToLower() && d.Id != category.Id)) ModelState.AddModelError("Name", "Category name must be unique");
+            if (_unitOfWork.CategoryRepository.Any(d => d.Name.ToLower() == category.Name.ToLower() && d.Id != category.Id)) ModelState.AddModelError("Name", "Category name must be unique");
             if (!ModelState.IsValid) return View("Edit", category);
 
-            _categoryRepository.Update(category);
-            _categoryRepository.Save();
+            _unitOfWork.CategoryRepository.Update(category);
+            _unitOfWork.Save();
 
             TempData["success"] = "Category updated successfully";
 
@@ -71,7 +71,7 @@ namespace WebMVC.Controllers
 
         public IActionResult Delete(int? Id)
         {
-            Category? category = _categoryRepository.Get(d => d.Id == Id);
+            Category? category = _unitOfWork.CategoryRepository.Get(d => d.Id == Id);
 
             if (category == null) return NotFound();
 
@@ -83,8 +83,8 @@ namespace WebMVC.Controllers
         {
             if (category == null) return NotFound();
 
-            _categoryRepository.Remove(category);
-            _categoryRepository.Save();
+            _unitOfWork.CategoryRepository.Remove(category);
+            _unitOfWork.Save();
 
             TempData["success"] = "Category deleted successfully";
 
