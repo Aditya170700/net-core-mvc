@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Web.DataAccesses.Data;
+using Web.DataAccesses.Repository.IRepository;
 using Web.Models;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,16 +13,16 @@ namespace WebMVC.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly AppDbContext _appDbContext;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public CategoryController(AppDbContext appDbContext)
+        public CategoryController(ICategoryRepository categoryRepository)
         {
-            _appDbContext = appDbContext;
+            _categoryRepository = categoryRepository;
         }
 
         public IActionResult Index()
         {
-            List<Category> results = _appDbContext.Categories.ToList();
+            List<Category> results = _categoryRepository.GetAll().ToList();
 
             return View(results);
         }
@@ -34,11 +35,11 @@ namespace WebMVC.Controllers
         [HttpPost]
         public IActionResult Store(Category category)
         {
-            if (_appDbContext.Categories.Any(d => d.Name.ToLower() == category.Name.ToLower())) ModelState.AddModelError("Name", "Category name must be unique");
+            if (_categoryRepository.Any(d => d.Name.ToLower() == category.Name.ToLower())) ModelState.AddModelError("Name", "Category name must be unique");
             if (!ModelState.IsValid) return View("Create", category);
 
-            _appDbContext.Categories.Add(category);
-            _appDbContext.SaveChanges();
+            _categoryRepository.Add(category);
+            _categoryRepository.Save();
 
             TempData["success"] = "Category created successfully";
 
@@ -47,7 +48,7 @@ namespace WebMVC.Controllers
 
         public IActionResult Edit(int? Id)
         {
-            Category? category = _appDbContext.Categories.Find(Id);
+            Category? category = _categoryRepository.Get(d => d.Id == Id);
 
             if (category == null) return NotFound();
 
@@ -57,11 +58,11 @@ namespace WebMVC.Controllers
         [HttpPost]
         public IActionResult Update(Category category)
         {
-            if (_appDbContext.Categories.Any(d => d.Name.ToLower() == category.Name.ToLower() && d.Id != category.Id)) ModelState.AddModelError("Name", "Category name must be unique");
+            if (_categoryRepository.Any(d => d.Name.ToLower() == category.Name.ToLower() && d.Id != category.Id)) ModelState.AddModelError("Name", "Category name must be unique");
             if (!ModelState.IsValid) return View("Edit", category);
 
-            _appDbContext.Categories.Update(category);
-            _appDbContext.SaveChanges();
+            _categoryRepository.Update(category);
+            _categoryRepository.Save();
 
             TempData["success"] = "Category updated successfully";
 
@@ -70,7 +71,7 @@ namespace WebMVC.Controllers
 
         public IActionResult Delete(int? Id)
         {
-            Category? category = _appDbContext.Categories.Find(Id);
+            Category? category = _categoryRepository.Get(d => d.Id == Id);
 
             if (category == null) return NotFound();
 
@@ -82,8 +83,8 @@ namespace WebMVC.Controllers
         {
             if (category == null) return NotFound();
 
-            _appDbContext.Categories.Remove(category);
-            _appDbContext.SaveChanges();
+            _categoryRepository.Remove(category);
+            _categoryRepository.Save();
 
             TempData["success"] = "Category deleted successfully";
 

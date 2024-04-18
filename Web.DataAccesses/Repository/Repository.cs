@@ -21,6 +21,12 @@ namespace Web.DataAccesses.Repository
             _dbSet.Add(entity);
         }
 
+        public bool Any(Expression<Func<T, bool>> filter)
+        {
+            IQueryable<T> query = _dbSet;
+            return query.Any(filter);
+        }
+
         public T Get(Expression<Func<T, bool>> filter)
         {
             IQueryable<T> query = _dbSet;
