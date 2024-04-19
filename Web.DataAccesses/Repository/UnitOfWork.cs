@@ -8,11 +8,13 @@ namespace Web.DataAccesses.Repository
 	{
         private readonly AppDbContext _appDbContext;
         public ICategoryRepository CategoryRepository { get; private set; }
+        public IProductRepository ProductRepository { get; private set; }
 
-		public UnitOfWork(AppDbContext appDbContext)
+        public UnitOfWork(AppDbContext appDbContext)
 		{
             _appDbContext = appDbContext;
             CategoryRepository = new CategoryRepository(_appDbContext);
+            ProductRepository = new ProductRepository(_appDbContext);
         }
 
         public void Save()
