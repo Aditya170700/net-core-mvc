@@ -1,0 +1,73 @@
+﻿@model Product
+
+<div class="container">
+    <div class="row py-4">
+        <div class="col-6">
+            <h1>EDIT PRODUCT</h1>
+        </div>
+        <div class="col-6 text-end">
+            <a class="btn btn-outline-primary btn-sm rounded" asp-controller="Product" asp-action="Index">
+                <i class="bi bi-arrow-left"></i> BACK
+            </a>
+        </div>
+    </div>
+    <form method="post" asp-controller="Product" asp-action="Update">
+        <input asp-for="Id" hidden />
+        <div class="border p-3 my-4">
+            <div class="row">
+                <div class="col-lg-4 mb-3">
+                    <label asp-for="Title"></label>
+                    <input class="form-control rounded" type="text" asp-for="Title" />
+                    <span asp-validation-for="Title" class="text-danger small"></span>
+                </div>
+                <div class="col-lg-4 mb-3">
+                    <label asp-for="Isbn"></label>
+                    <input class="form-control rounded" type="text" asp-for="Isbn" />
+                    <span asp-validation-for="Isbn" class="text-danger small"></span>
+                </div>
+                <div class="col-lg-4 mb-3">
+                    <label asp-for="Author"></label>
+                    <input class="form-control rounded" type="text" asp-for="Author" />
+                    <span asp-validation-for="Author" class="text-danger small"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 mb-3">
+                    <label asp-for="Description"></label>
+                    <textarea class="form-control rounded" asp-for="Description" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger small"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 mb-3">
+                    <label asp-for="ListPrice"></label>
+                    <input class="form-control rounded" type="number" asp-for="ListPrice" />
+                    <span asp-validation-for="ListPrice" class="text-danger small"></span>
+                </div>
+                <div class="col-lg-3 mb-3">
+                    <label asp-for="Price"></label>
+                    <input class="form-control rounded" type="number" asp-for="Price" />
+                    <span asp-validation-for="Price" class="text-danger small"></span>
+                </div>
+                <div class="col-lg-3 mb-3">
+                    <label asp-for="Price50"></label>
+                    <input class="form-control rounded" type="number" asp-for="Price50" />
+                    <span asp-validation-for="Price50" class="text-danger small"></span>
+                </div>
+                <div class="col-lg-3 mb-3">
+                    <label asp-for="Price100"></label>
+                    <input class="form-control rounded" type="number" asp-for="Price100" />
+                    <span asp-validation-for="Price100" class="text-danger small"></span>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary rounded w-10">UPDATE</button>
+        </div>
+    </form>
+</div>
+
+@*Client side validation*@
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

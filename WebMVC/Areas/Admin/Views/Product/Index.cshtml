@@ -1,0 +1,41 @@
+﻿@model List<Product>
+
+<div class="container">
+    <div class="row py-4">
+        <div class="col-6">
+            <h1>PRODUCT LIST</h1>
+        </div>
+        <div class="col-6 text-end">
+            <a class="btn btn-primary btn-sm rounded" asp-controller="Product" asp-action="Create">
+                <i class="bi bi-plus-lg"></i> CREATE
+            </a>
+        </div>
+    </div>
+
+    <table class="table table-bordered table-striped rounded">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>ISBN</th>
+                <th>Author</th>
+                <th>List Price</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tnody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@item.Isbn</td>
+                    <td>@item.Author</td>
+                    <td>USD @item.ListPrice</td>
+                    <td class="d-flex justify-content-center">
+                        <a class="btn btn-sm btn-warning rounded mx-1" asp-controller="Product" asp-action="Edit" asp-route-Id="@item.Id"><i class="bi bi-pencil-square"></i></a>
+                        <a class="btn btn-sm btn-danger rounded mx-1" asp-controller="Product" asp-action="Delete" asp-route-Id="@item.Id"><i class="bi bi-trash-fill"></i></a>
+                    </td>
+                </tr>
+            }
+        </tnody>
+    </table>
+</div>

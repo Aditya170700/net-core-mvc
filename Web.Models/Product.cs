@@ -12,6 +12,7 @@ namespace Web.Models
         public string Title { get; set; }
         public string Description { get; set; }
         [Required]
+        [DisplayName("ISBN")]
         public string Isbn { get; set; }
         [Required]
         public string Author { get; set; }
