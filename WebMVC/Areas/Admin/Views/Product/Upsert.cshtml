@@ -3,7 +3,7 @@
 <div class="container">
     <div class="row py-4">
         <div class="col-6">
-            <h1>CREATE PRODUCT</h1>
+            <h1>@(Model.Product.Id != 0 ? "EDIT" : "CREATE") PRODUCT</h1>
         </div>
         <div class="col-6 text-end">
             <a class="btn btn-outline-primary btn-sm rounded" asp-controller="Product" asp-action="Index">
@@ -12,6 +12,7 @@
         </div>
     </div>
     <form method="post" asp-controller="Product" asp-action="Store" enctype="multipart/form-data">
+        <input asp-for="@Model.Product.Id" hidden />
         <div class="border p-3 my-4">
             <div class="row">
                 <div class="col-lg-3 mb-3">
@@ -72,7 +73,7 @@
                     <input class="form-control rounded" type="file" />
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary rounded w-10">SAVE</button>
+            <button type="submit" class="btn btn-primary rounded w-10">@(Model.Product.Id != 0 ? "EDIT" :  "SAVE")</button>
         </div>
 </form>
 </div>

@@ -29,7 +29,7 @@ namespace WebMVC.Areas.Admin.Controllers
             return View(results);
         }
 
-        public IActionResult Create()
+        public IActionResult Upsert(int? Id)
         {
             ProductViewModel vm = new ProductViewModel()
             {
@@ -40,14 +40,14 @@ namespace WebMVC.Areas.Admin.Controllers
                     Text = d.Name,
                     Value = d.Id.ToString()
                 }),
-                Product = new Product()
+                Product = _unitOfWork.ProductRepository.Get(d => d.Id == Id) ?? new Product()
             };
 
             return View(vm);
         }
 
         [HttpPost]
-        public IActionResult Store(ProductViewModel vm)
+        public IActionResult Upsert(ProductViewModel vm, IFormFile? file)
         {
             if (_unitOfWork.ProductRepository.Any(d => d.Title.ToLower() == vm.Product.Title.ToLower())) ModelState.AddModelError("Title", "Product title must be unique");
             if (_unitOfWork.ProductRepository.Any(d => d.Isbn.ToLower() == vm.Product.Isbn.ToLower())) ModelState.AddModelError("Isbn", "Product ISBN must be unique");
@@ -57,30 +57,6 @@ namespace WebMVC.Areas.Admin.Controllers
             _unitOfWork.Save();
 
             TempData["success"] = "Product created successfully";
-
-            return RedirectToAction("Index", "Product");
-        }
-
-        public IActionResult Edit(int? Id)
-        {
-            Product? product = _unitOfWork.ProductRepository.Get(d => d.Id == Id);
-
-            if (product == null) return NotFound();
-
-            return View(product);
-        }
-
-        [HttpPost]
-        public IActionResult Update(Product product)
-        {
-            if (_unitOfWork.ProductRepository.Any(d => d.Title.ToLower() == product.Title.ToLower() && d.Id != product.Id)) ModelState.AddModelError("Title", "Product title must be unique");
-            if (_unitOfWork.ProductRepository.Any(d => d.Isbn.ToLower() == product.Isbn.ToLower() && d.Id != product.Id)) ModelState.AddModelError("Isbn", "Product ISBN must be unique");
-            if (!ModelState.IsValid) return View("Edit", product);
-
-            _unitOfWork.ProductRepository.Update(product);
-            _unitOfWork.Save();
-
-            TempData["success"] = "Product updated successfully";
 
             return RedirectToAction("Index", "Product");
         }
