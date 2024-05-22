@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Web.DataAccesses.Repository.IRepository;
 using Web.Models;
+using Web.Models.ViewModels;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -29,17 +31,29 @@ namespace WebMVC.Areas.Admin.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            ProductViewModel vm = new ProductViewModel()
+            {
+                CategoryList = _unitOfWork.CategoryRepository
+                .GetAll()
+                .Select(d => new SelectListItem()
+                {
+                    Text = d.Name,
+                    Value = d.Id.ToString()
+                }),
+                Product = new Product()
+            };
+
+            return View(vm);
         }
 
         [HttpPost]
-        public IActionResult Store(Product product)
+        public IActionResult Store(ProductViewModel vm)
         {
-            if (_unitOfWork.ProductRepository.Any(d => d.Title.ToLower() == product.Title.ToLower())) ModelState.AddModelError("Title", "Product title must be unique");
-            if (_unitOfWork.ProductRepository.Any(d => d.Isbn.ToLower() == product.Isbn.ToLower())) ModelState.AddModelError("Isbn", "Product ISBN must be unique");
-            if (!ModelState.IsValid) return View("Create", product);
+            if (_unitOfWork.ProductRepository.Any(d => d.Title.ToLower() == vm.Product.Title.ToLower())) ModelState.AddModelError("Title", "Product title must be unique");
+            if (_unitOfWork.ProductRepository.Any(d => d.Isbn.ToLower() == vm.Product.Isbn.ToLower())) ModelState.AddModelError("Isbn", "Product ISBN must be unique");
+            if (!ModelState.IsValid) return View("Create", vm.Product);
 
-            _unitOfWork.ProductRepository.Add(product);
+            _unitOfWork.ProductRepository.Add(vm.Product);
             _unitOfWork.Save();
 
             TempData["success"] = "Product created successfully";
