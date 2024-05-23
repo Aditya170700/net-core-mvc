@@ -51,15 +51,25 @@ namespace WebMVC.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Upsert(ProductViewModel vm, IFormFile? file)
         {
-            if (_unitOfWork.ProductRepository.Any(d => d.Title.ToLower() == vm.Product.Title.ToLower())) ModelState.AddModelError("Title", "Product title must be unique");
-            if (_unitOfWork.ProductRepository.Any(d => d.Isbn.ToLower() == vm.Product.Isbn.ToLower())) ModelState.AddModelError("Isbn", "Product ISBN must be unique");
-            if (!ModelState.IsValid) return View("Create", vm.Product);
+            if (_unitOfWork.ProductRepository.Any(d => d.Id != vm.Product.Id && d.Title.ToLower() == vm.Product.Title.ToLower())) ModelState.AddModelError("Title", "Product title must be unique");
+            if (_unitOfWork.ProductRepository.Any(d => d.Id != vm.Product.Id && d.Isbn.ToLower() == vm.Product.Isbn.ToLower())) ModelState.AddModelError("Isbn", "Product ISBN must be unique");
+            if (!ModelState.IsValid) return View("Upsert", vm.Product);
 
             if (file != null)
             {
                 string wwwRootPath = _webHostEnvironment.WebRootPath;
                 string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
                 string productPath = Path.Combine(wwwRootPath, @"images/product");
+
+                if (!string.IsNullOrEmpty(vm.Product.ImageUrl))
+                {
+                    var oldImagePath = Path.Combine(wwwRootPath, vm.Product.ImageUrl.TrimStart('/'));
+
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+                }
 
                 using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
                 {
@@ -69,10 +79,21 @@ namespace WebMVC.Areas.Admin.Controllers
                 vm.Product.ImageUrl = @"/images/product/" + fileName;
             }
 
-            _unitOfWork.ProductRepository.Add(vm.Product);
+            string message = "";
+            if (new List<int?>() { 0, null }.Contains(vm.Product.Id))
+            {
+                _unitOfWork.ProductRepository.Add(vm.Product);
+                message = "created";
+            }
+            else
+            {
+                _unitOfWork.ProductRepository.Update(vm.Product);
+                message = "updated";
+            }
+
             _unitOfWork.Save();
 
-            TempData["success"] = "Product created successfully";
+            TempData["success"] = $"Product {message} successfully";
 
             return RedirectToAction("Index", "Product");
         }
