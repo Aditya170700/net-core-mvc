@@ -16,10 +16,12 @@ namespace WebMVC.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ProductController(IUnitOfWork unitOfWork)
+        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Index()
@@ -52,6 +54,20 @@ namespace WebMVC.Areas.Admin.Controllers
             if (_unitOfWork.ProductRepository.Any(d => d.Title.ToLower() == vm.Product.Title.ToLower())) ModelState.AddModelError("Title", "Product title must be unique");
             if (_unitOfWork.ProductRepository.Any(d => d.Isbn.ToLower() == vm.Product.Isbn.ToLower())) ModelState.AddModelError("Isbn", "Product ISBN must be unique");
             if (!ModelState.IsValid) return View("Create", vm.Product);
+
+            if (file != null)
+            {
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                string productPath = Path.Combine(wwwRootPath, @"images/product");
+
+                using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
+                {
+                    file.CopyTo(fileStream);
+                }
+
+                vm.Product.ImageUrl = @"/images/product/" + fileName;
+            }
 
             _unitOfWork.ProductRepository.Add(vm.Product);
             _unitOfWork.Save();
