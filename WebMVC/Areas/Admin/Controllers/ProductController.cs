@@ -121,6 +121,21 @@ namespace WebMVC.Areas.Admin.Controllers
 
             return RedirectToAction("Index", "Product");
         }
+
+        #region API CALLS
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            List<Product> results = _unitOfWork.ProductRepository
+                .GetAll(includeProperties: "Category")
+                .ToList();
+
+            return Json(new
+            {
+                Data = results
+            });
+        }
+        #endregion
     }
 }
 
