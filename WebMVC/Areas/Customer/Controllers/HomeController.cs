@@ -23,6 +23,14 @@ namespace WebMVC.Areas.Customer.Controllers
             return View(products);
         }
 
+        public IActionResult Detail(int Id)
+        {
+            Product result = _unitOfWork.ProductRepository
+                .Get(d => d.Id == Id, includeProperties: "Category");
+
+            return View(result);
+        }
+
         public IActionResult Privacy()
         {
             return View();
