@@ -23,22 +23,6 @@
                 <th></th>
             </tr>
         </thead>
-        @*<tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.Title</td>
-                    <td>@item.Isbn</td>
-                    <td>@item.Category.Name</td>
-                    <td>@item.Author</td>
-                    <td>USD @item.ListPrice</td>
-                    <td class="d-flex justify-content-center">
-                        <a class="btn btn-sm btn-warning rounded mx-1" asp-controller="Product" asp-action="Upsert" asp-route-Id="@item.Id"><i class="bi bi-pencil-square"></i></a>
-                        <a class="btn btn-sm btn-danger rounded mx-1" asp-controller="Product" asp-action="Delete" asp-route-Id="@item.Id"><i class="bi bi-trash-fill"></i></a>
-                    </td>
-                </tr>
-            }
-        </tbody>*@
     </table>
 </div>
 

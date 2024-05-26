@@ -100,28 +100,6 @@ namespace WebMVC.Areas.Admin.Controllers
             return RedirectToAction("Index", "Product");
         }
 
-        public IActionResult Delete(int? Id)
-        {
-            Product? product = _unitOfWork.ProductRepository.Get(d => d.Id == Id);
-
-            if (product == null) return NotFound();
-
-            return View(product);
-        }
-
-        [HttpPost]
-        public IActionResult Delete(Product product)
-        {
-            if (product == null) return NotFound();
-
-            _unitOfWork.ProductRepository.Remove(product);
-            _unitOfWork.Save();
-
-            TempData["success"] = "Product deleted successfully";
-
-            return RedirectToAction("Index", "Product");
-        }
-
         #region API CALLS
         [HttpGet]
         public IActionResult GetAll()
@@ -133,6 +111,37 @@ namespace WebMVC.Areas.Admin.Controllers
             return Json(new
             {
                 Data = results
+            });
+        }
+
+        [HttpDelete]
+        public IActionResult Delete(int? Id)
+        {
+            var product = _unitOfWork.ProductRepository.Get(d => d.Id == Id);
+
+            if (product == null)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Error while deleting"
+                });
+            }
+
+            var imgPath = Path.Combine(_webHostEnvironment.WebRootPath, product.ImageUrl.TrimStart('/'));
+
+            if (System.IO.File.Exists(imgPath))
+            {
+                System.IO.File.Delete(imgPath);
+            }
+
+            _unitOfWork.ProductRepository.Remove(product);
+            _unitOfWork.Save();
+
+            return Json(new
+            {
+                success = true,
+                message = "Delete successful"
             });
         }
         #endregion
